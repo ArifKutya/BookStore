@@ -2,7 +2,6 @@ using BookStore.BL.Interfaces;
 using BookStore.BL.Services;
 using BookStore.DL.Interfaces;
 using BookStore.DL.Repositories.InMemoryRepositories;
-using BookStore.Models.Base;
 
 var builder = WebApplication.CreateBuilder(args);
 
