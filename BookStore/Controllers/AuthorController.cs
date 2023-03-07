@@ -1,6 +1,7 @@
 using BookStore.BL.Interfaces;
 using BookStore.BL.Services;
-using BookStore.Models.Base;
+using BookStore.Models.Models;
+using BookStore.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.Controllers
@@ -33,9 +34,9 @@ namespace BookStore.Controllers
         }
 
         [HttpPost("Add")]
-        public void Add([FromBody]Author author)
+        public void Add([FromBody] AddAuthorRequest authorRequest)
         {
-            _authorService.Add(author);
+            _authorService.Add(authorRequest);
         }
 
         [HttpPost("Update")]
