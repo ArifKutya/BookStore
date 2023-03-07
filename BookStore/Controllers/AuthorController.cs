@@ -1,6 +1,7 @@
 using BookStore.BL.Interfaces;
 using BookStore.BL.Services;
-using BookStore.Models.Base;
+using BookStore.Models.Models;
+using BookStore.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.Controllers
@@ -11,15 +12,13 @@ namespace BookStore.Controllers
     {
         private readonly ILogger<AuthorController> _logger;
         private readonly IAuthorService _authorService;
-        private readonly ILifeTimeService _lifeTimeService;
 
         public AuthorController(
             ILogger<AuthorController> logger,
-            IAuthorService authorService, ILifeTimeService lifeTimeService)
+            IAuthorService authorService)
         {
             _logger = logger;
             _authorService = authorService;
-            _lifeTimeService = lifeTimeService;
         }
 
         [HttpGet("GetAllAuthors")]
@@ -28,22 +27,28 @@ namespace BookStore.Controllers
            return _authorService.GetAll();
         }
 
-        [HttpGet("GetId")]
+        [HttpGet("GetById")]
         public Author GetById(int id)
         {
             return _authorService.GetById(id);
         }
 
         [HttpPost("Add")]
-        public void Add([FromBody]Author author)
+        public void Add([FromBody] AddAuthorRequest authorRequest)
         {
-            _authorService.Add(author);
+            _authorService.Add(authorRequest);
         }
 
-        [HttpGet("GetGuid")]
-        public string GetGuid()
+        [HttpPost("Update")]
+        public void Update([FromBody] Author author)
         {
-            return _lifeTimeService.GetId();
+            _authorService.Update(author);
+        }
+
+        [HttpDelete("Delete")]
+        public void Delete(int id)
+        {
+            _authorService.Delete(id);
         }
     }
 }
