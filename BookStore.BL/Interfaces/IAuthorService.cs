@@ -9,5 +9,9 @@ namespace BookStore.BL.Interfaces
         Author GetById(int id);
 
         void Add(Author author);
+
+        void Delete(int id);
+
+        void Update(Author author);
     }
 }

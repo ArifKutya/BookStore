@@ -27,5 +27,15 @@ namespace BookStore.BL.Services
         {
             _authorRepository.Add(author);
         }
+
+        public void Delete(int id)
+        {
+            _authorRepository.Delete(id);
+        }
+
+        public void Update(Author author)
+        {
+           _authorRepository.Update(author);
+        }
     }
 }

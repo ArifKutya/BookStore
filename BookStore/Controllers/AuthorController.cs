@@ -11,15 +11,13 @@ namespace BookStore.Controllers
     {
         private readonly ILogger<AuthorController> _logger;
         private readonly IAuthorService _authorService;
-        private readonly ILifeTimeService _lifeTimeService;
 
         public AuthorController(
             ILogger<AuthorController> logger,
-            IAuthorService authorService, ILifeTimeService lifeTimeService)
+            IAuthorService authorService)
         {
             _logger = logger;
             _authorService = authorService;
-            _lifeTimeService = lifeTimeService;
         }
 
         [HttpGet("GetAllAuthors")]
@@ -28,7 +26,7 @@ namespace BookStore.Controllers
            return _authorService.GetAll();
         }
 
-        [HttpGet("GetId")]
+        [HttpGet("GetById")]
         public Author GetById(int id)
         {
             return _authorService.GetById(id);
@@ -40,10 +38,16 @@ namespace BookStore.Controllers
             _authorService.Add(author);
         }
 
-        [HttpGet("GetGuid")]
-        public string GetGuid()
+        [HttpPost("Update")]
+        public void Update([FromBody] Author author)
         {
-            return _lifeTimeService.GetId();
+            _authorService.Update(author);
+        }
+
+        [HttpDelete("Delete")]
+        public void Delete(int id)
+        {
+            _authorService.Delete(id);
         }
     }
 }
