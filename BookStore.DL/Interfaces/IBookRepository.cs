@@ -14,5 +14,7 @@ namespace BookStore.DL.Interfaces
         void Delete(int id);
 
         void Update(Book author);
+
+        IEnumerable<Book> GetAllByAuthorId(int authorId);
     }
 }
