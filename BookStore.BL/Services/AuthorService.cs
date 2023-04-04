@@ -18,33 +18,34 @@ namespace BookStore.BL.Services
             _mapper = mapper;
         }
 
-        public IEnumerable<Author> GetAll()
+        public async Task<IEnumerable<Author>> GetAll()
         {
-            return _authorRepository.GetAll();
+            return await _authorRepository.GetAll();
         }
 
-        public Author GetById(int id)
+        public async Task<Author> GetById(int id)
         {
-            return _authorRepository.GetById(id);
+            return await _authorRepository.GetById(id);
         }
 
-        public void Add(AddAuthorRequest authorRequest)
+        public async Task Add(AddAuthorRequest authorRequest)
         {
             var author =
                 _mapper.Map<Author>(authorRequest);
 
-            _authorRepository.Add(author);
+            await _authorRepository.Add(author);
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            _authorRepository.Delete(id);
+            await _authorRepository.Delete(id);
         }
 
-        public void Update(UpdateAuthorRequest authorRequest)
+        public async Task Update(UpdateAuthorRequest authorRequest)
         {
             var author = _mapper.Map<Author>(authorRequest);
-           _authorRepository.Update(author);
+           
+            await _authorRepository.Update(author);
         }
     }
 }
