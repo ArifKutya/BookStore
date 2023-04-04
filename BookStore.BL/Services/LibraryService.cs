@@ -16,7 +16,7 @@ namespace BookStore.BL.Services
             _authorRepository = authorRepository;
             _bookRepository = bookRepository;
         }
-        public GetAllBooksByAuthorResponse GetAllBooksByAuthorId(int authorId)
+        public GetAllBooksByAuthorResponse GetAllBooksByAuthorId(Guid authorId)
         {
             var author = _authorRepository.GetById(authorId);
             var books = Enumerable.Empty<Book>();

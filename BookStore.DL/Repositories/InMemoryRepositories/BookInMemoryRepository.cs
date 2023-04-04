@@ -45,10 +45,11 @@ namespace BookStore.DL.Repositories.InMemoryRepositories
             }
         }
 
-        public IEnumerable<Book> GetAllByAuthorId(int authorId)
+        public IEnumerable<Book> GetAllByAuthorId(Guid authorId)
         {
-            return InMemoryDb.Data.Books
-                .Where(book => book.AuthorId == authorId);
+            //return InMemoryDb.Data.Books
+            //    .Where(book => book.AuthorId == authorId);
+            return Enumerable.Empty<Book>();
         }
     }
 }

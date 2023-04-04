@@ -28,7 +28,7 @@ namespace BookStore.DL.Repositories.MongoDb
                 _authors.Find(author => true).ToListAsync();
         }
 
-        public async Task<Author> GetById(int id)
+        public async Task<Author> GetById(Guid id)
         {
             return await _authors
                 .Find(x => x.Id == id)
@@ -40,7 +40,7 @@ namespace BookStore.DL.Repositories.MongoDb
            await _authors.InsertOneAsync(author);
         }
 
-        public Task Delete(int id)
+        public Task Delete(Guid id)
         {
             return _authors.DeleteOneAsync(x => x.Id == id);
         }

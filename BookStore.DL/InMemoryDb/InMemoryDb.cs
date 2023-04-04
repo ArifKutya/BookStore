@@ -8,12 +8,12 @@ namespace BookStore.DL.InMemoryDb
         {
             new Author()
             {
-                Id = 1,
+                Id = Guid.NewGuid(),
                 Name = "Pesho"
             },
             new Author()
             {
-                Id = 2,
+                Id = Guid.NewGuid(),
                 Name = "Stamat"
             }
         };

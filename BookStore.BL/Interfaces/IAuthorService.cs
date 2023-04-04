@@ -7,11 +7,11 @@ namespace BookStore.BL.Interfaces
     {
         Task<IEnumerable<Author>> GetAll();
 
-        Task<Author> GetById(int id);
+        Task<Author> GetById(Guid id);
 
         Task Add(AddAuthorRequest author);
 
-        Task Delete(int id);
+        Task Delete(Guid id);
 
         Task Update(UpdateAuthorRequest author);
     }

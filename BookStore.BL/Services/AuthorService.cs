@@ -23,7 +23,7 @@ namespace BookStore.BL.Services
             return await _authorRepository.GetAll();
         }
 
-        public async Task<Author> GetById(int id)
+        public async Task<Author> GetById(Guid id)
         {
             return await _authorRepository.GetById(id);
         }
@@ -33,10 +33,12 @@ namespace BookStore.BL.Services
             var author =
                 _mapper.Map<Author>(authorRequest);
 
+            author.Id = Guid.NewGuid();
+
             await _authorRepository.Add(author);
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(Guid id)
         {
             await _authorRepository.Delete(id);
         }

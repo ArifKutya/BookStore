@@ -16,7 +16,7 @@ namespace BookStore.Controllers
 
         [HttpGet("GetAllBooksByAuthor")]
         public GetAllBooksByAuthorResponse
-            GetAllBooksByAuthor(int authorId)
+            GetAllBooksByAuthor(Guid authorId)
         {
             return _libraryService.GetAllBooksByAuthorId(authorId);
         }
