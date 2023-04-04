@@ -4,8 +4,8 @@ namespace BookStore.Models.Base
 {
     public class Person
     {
-        [BsonElement("_id")]
         [BsonId]
+        [BsonElement("_id")]
         public Guid Id { get; set; }
 
         public string Name { get; set; }
