@@ -18,7 +18,7 @@ namespace BookStore.DL.Repositories.MongoDb
                 client.GetDatabase(mongoConfig.CurrentValue.DatabaseName);
 
             _books = database
-                .GetCollection<Book>($"{nameof(Book)}-BS")
+                .GetCollection<Book>($"{nameof(Book)}-BS");
         }
 
         public async Task<IEnumerable<Book>> GetAll()

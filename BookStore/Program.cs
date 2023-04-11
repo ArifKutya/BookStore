@@ -27,7 +27,7 @@ builder.Services.Configure<MongoDbConfiguration>(
 builder.Services.AddSingleton<IAuthorService, AuthorService>();
 builder.Services.AddSingleton<IAuthorRepository, AuthorMongoRepository>();
 builder.Services.AddSingleton<IBookService, BookService>();
-builder.Services.AddSingleton<IBookRepository, BookInMemoryRepository>();
+builder.Services.AddSingleton<IBookRepository, BookMongoRepository>();
 builder.Services.AddSingleton<ILibraryService, LibraryService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
