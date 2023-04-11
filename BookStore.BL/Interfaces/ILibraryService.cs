@@ -4,7 +4,7 @@ namespace BookStore.BL.Interfaces
 {
     public interface ILibraryService
     {
-        GetAllBooksByAuthorResponse 
+        Task<GetAllBooksByAuthorResponse> 
             GetAllBooksByAuthorId(Guid authorId);
     }
 }
