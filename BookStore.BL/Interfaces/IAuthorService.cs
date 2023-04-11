@@ -5,14 +5,14 @@ namespace BookStore.BL.Interfaces
 {
     public interface IAuthorService
     {
-        IEnumerable<Author> GetAll();
+        Task<IEnumerable<Author>> GetAll();
 
-        Author GetById(int id);
+        Task<Author> GetById(Guid id);
 
-        void Add(AddAuthorRequest author);
+        Task Add(AddAuthorRequest author);
 
-        void Delete(int id);
+        Task Delete(Guid id);
 
-        void Update(UpdateAuthorRequest author);
+        Task Update(UpdateAuthorRequest author);
     }
 }

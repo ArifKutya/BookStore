@@ -3,14 +3,14 @@ using BookStore.Models.Models;
 
 namespace BookStore.DL.Repositories.InMemoryRepositories
 {
-    public class AuthorInMemoryRepository : IAuthorRepository
+    public class AuthorInMemoryRepository 
     {
         public IEnumerable<Author> GetAll()
         {
             return InMemoryDb.Data.Authors;
         }
 
-        public Author GetById(int id)
+        public Author GetById(Guid id)
         {
             return InMemoryDb.Data
                 .Authors.SingleOrDefault(x => x.Id == id);
@@ -21,7 +21,7 @@ namespace BookStore.DL.Repositories.InMemoryRepositories
             InMemoryDb.Data.Authors.Add(author);
         }
 
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
             var author =
                 InMemoryDb.Data.Authors
