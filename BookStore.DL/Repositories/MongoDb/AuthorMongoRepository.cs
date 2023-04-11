@@ -19,7 +19,7 @@ namespace BookStore.DL.Repositories.MongoDb
                 client.GetDatabase(mongoConfig.CurrentValue.DatabaseName);
 
             _authors = database
-                .GetCollection<Author>(nameof(Author));
+                .GetCollection<Author>($"{nameof(Author)}-BS");
         }
 
         public async Task<IEnumerable<Author>> GetAll()
