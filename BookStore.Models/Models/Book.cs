@@ -1,11 +1,14 @@
-﻿namespace BookStore.Models.Models
+﻿using MongoDB.Bson.Serialization.Attributes;
+
+namespace BookStore.Models.Models
 {
     public class Book
     {
-        public int Id { get; set; }
+        [BsonId]
+        public Guid Id { get; set; }
 
         public string Title { get; set; }
 
-        public int AuthorId { get; set; }
+        public Guid AuthorId { get; set; }
     }
 }

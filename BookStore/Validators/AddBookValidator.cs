@@ -8,8 +8,7 @@ namespace BookStore.Validators
         public AddBookValidator()
         {
             RuleFor(x => x.AuthorId)
-                .NotEmpty()
-                .GreaterThan(0);
+                .NotEmpty();
             RuleFor(x => x.Title)
                 .NotNull().NotEmpty()
                 .MinimumLength(1);

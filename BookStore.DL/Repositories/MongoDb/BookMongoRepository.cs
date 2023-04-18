@@ -2,6 +2,7 @@
 using BookStore.Models.Configurations;
 using BookStore.Models.Models;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace BookStore.DL.Repositories.MongoDb
@@ -16,9 +17,12 @@ namespace BookStore.DL.Repositories.MongoDb
                 mongoConfig.CurrentValue.ConnectionString);
             var database =
                 client.GetDatabase(mongoConfig.CurrentValue.DatabaseName);
-
+            var collectionSettings = new MongoCollectionSettings
+            {
+                GuidRepresentation = GuidRepresentation.Standard
+            };
             _books = database
-                .GetCollection<Book>($"{nameof(Book)}-BS");
+                .GetCollection<Book>(nameof(Book), collectionSettings);
         }
 
         public async Task<IEnumerable<Book>> GetAll()
@@ -27,11 +31,12 @@ namespace BookStore.DL.Repositories.MongoDb
                 _books.Find(author => true).ToListAsync();
         }
 
-        public async Task<Book?> GetById(int id)
+        public async Task<Book?> GetById(Guid id)
         {
-            return await _books
-                .Find(x => x.Id == id)
+            var item = await _books
+                .Find(Builders<Book>.Filter.Eq("_id", id))
                 .FirstOrDefaultAsync();
+            return item;
         }
 
         public async Task Add(Book author)
@@ -39,7 +44,7 @@ namespace BookStore.DL.Repositories.MongoDb
             await _books.InsertOneAsync(author);
         }
 
-        public Task Delete(int id)
+        public Task Delete(Guid id)
         {
             return _books.DeleteOneAsync(x => x.Id == id);
         }
@@ -57,7 +62,9 @@ namespace BookStore.DL.Repositories.MongoDb
 
         public async Task<IEnumerable<Book>> GetAllByAuthorId(Guid authorId)
         {
-            return await GetAll();
+            return await _books
+                .Find(x => x.AuthorId == authorId)
+                .ToListAsync();
         }
     }
 }
