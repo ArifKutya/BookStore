@@ -27,7 +27,7 @@ namespace BookStore.DL.Repositories.MongoDb
                 _books.Find(author => true).ToListAsync();
         }
 
-        public async Task<Book> GetById(int id)
+        public async Task<Book?> GetById(int id)
         {
             return await _books
                 .Find(x => x.Id == id)

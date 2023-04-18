@@ -18,7 +18,7 @@ namespace BookStore.BL.Services
             return await _bookRepository.GetAll();
         }
 
-        public async Task<Book> GetById(int id)
+        public async Task<Book?> GetById(int id)
         {
             return await _bookRepository.GetById(id);
         }
