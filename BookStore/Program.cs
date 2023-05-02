@@ -3,9 +3,9 @@ using BookStore.BL.Services;
 using BookStore.DL.Interfaces;
 using BookStore.DL.Repositories.InMemoryRepositories;
 using BookStore.DL.Repositories.MongoDb;
+using BookStore.Extensions;
+using BookStore.HealthChecks;
 using BookStore.Models.Configurations;
-using FluentValidation;
-using FluentValidation.AspNetCore;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson;
@@ -39,10 +39,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddFluentValidationAutoValidation()
-    .AddFluentValidationClientsideAdapters();
-builder.Services
-    .AddValidatorsFromAssemblyContaining(typeof(Program));
+builder.Services.AddHealthChecks()
+    .AddCheck<MongoHealthCheck>("MongoDB");
 
 BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
 
@@ -54,6 +52,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.RegisterHealthChecks();
 
 app.UseHttpsRedirection();
 
