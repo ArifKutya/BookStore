@@ -6,7 +6,7 @@ namespace BookStore.BL.Interfaces
     {
         Task<IEnumerable<Book>> GetAll();
         Task<Book?> GetById(Guid id);
-        Task Add(Book author);
+        Task<Book?> Add(Book author);
         Task Delete(Guid id);
         Task Update(Book book);
     }
