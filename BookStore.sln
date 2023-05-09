@@ -5,11 +5,13 @@ VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore", "BookStore\BookStore.csproj", "{7AE095FA-05D8-4862-AE31-A636DC9567D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStore.BL", "BookStore.BL\BookStore.BL.csproj", "{9B2E41FB-3C6A-49D0-A09B-2C8EDE93C84B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.BL", "BookStore.BL\BookStore.BL.csproj", "{9B2E41FB-3C6A-49D0-A09B-2C8EDE93C84B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStore.DL", "BookStore.DL\BookStore.DL.csproj", "{812869BC-7FBD-43FC-8F19-254F4C0837EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.DL", "BookStore.DL\BookStore.DL.csproj", "{812869BC-7FBD-43FC-8F19-254F4C0837EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStore.Models", "BookStore.Models\BookStore.Models.csproj", "{D88C60E9-F6CB-46A9-BBE6-0E5043A5DE9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.Models", "BookStore.Models\BookStore.Models.csproj", "{D88C60E9-F6CB-46A9-BBE6-0E5043A5DE9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStore.Test", "BookStore.Test\BookStore.Test.csproj", "{CA1A0D59-511D-4F60-A298-1AB0A031E0E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{D88C60E9-F6CB-46A9-BBE6-0E5043A5DE9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D88C60E9-F6CB-46A9-BBE6-0E5043A5DE9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D88C60E9-F6CB-46A9-BBE6-0E5043A5DE9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA1A0D59-511D-4F60-A298-1AB0A031E0E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA1A0D59-511D-4F60-A298-1AB0A031E0E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA1A0D59-511D-4F60-A298-1AB0A031E0E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA1A0D59-511D-4F60-A298-1AB0A031E0E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

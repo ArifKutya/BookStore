@@ -7,10 +7,14 @@ namespace BookStore.BL.Services
     public class BookService : IBookService
     {
         private readonly IBookRepository _bookRepository;
+        private readonly IAuthorService _authorService;
 
-        public BookService(IBookRepository bookRepository)
+        public BookService(
+            IBookRepository bookRepository,
+            IAuthorService authorService)
         {
             _bookRepository = bookRepository;
+            _authorService = authorService;
         }
 
         public async Task<IEnumerable<Book>> GetAll()
@@ -20,12 +24,33 @@ namespace BookStore.BL.Services
 
         public async Task<Book?> GetById(Guid id)
         {
-            return await _bookRepository.GetById(id);
+            var result = await _bookRepository.GetById(id);
+
+            if (result != null)
+            {
+                result.Title = $"!{result.Title}";
+            }
+
+            return result;
         }
 
         public async Task Add(Book book)
         {
             book.Id = Guid.NewGuid();
+
+            var author = 
+                _authorService.GetById(book.AuthorId);
+
+            if (author == null) return;
+
+            var authorBooks = 
+                await _bookRepository
+                    .GetAllByAuthorId(book.AuthorId);
+
+            var titleForAuthorExist =
+                authorBooks.Any(b => b.Title == book.Title);
+
+            if (titleForAuthorExist) return;
 
             await _bookRepository.Add(book);
         }
