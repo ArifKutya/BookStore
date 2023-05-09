@@ -156,7 +156,37 @@ namespace BookStore.Test
         [Fact]
         public async Task Book_Add_Author_Not_Found()
         {
+            //setup
+            var bookToAdd = new Book()
+            {
+                Id = new Guid("1c18f6ae-a16c-477e-b267-9184c4819742"),
+                Title = "New Title",
+                AuthorId = new Guid("dd9961d2-cab0-4bf5-9a9d-48862a64d63a"),
+            };
+            var expectedBookCount = 2;
 
+            _authorService.Setup(a =>
+                a.GetById(bookToAdd.AuthorId)).Returns(() =>
+                Task.FromResult(Authors.FirstOrDefault(x => x.Id == bookToAdd.AuthorId)));
+
+            _bookRepository.Setup(
+                    x =>
+                        x.GetAllByAuthorId(bookToAdd.AuthorId))
+                .Returns(() =>
+                    Task.FromResult(Books.Where(x => x.AuthorId == bookToAdd.AuthorId)));
+
+            _bookRepository.Setup(x =>
+                x.Add(It.IsAny<Book>()));
+
+            //inject
+            var service = new BookService(_bookRepository.Object, _authorService.Object);
+
+            //Act
+            var result = await service.Add(bookToAdd);
+
+            //Assert
+            Assert.Equal(expectedBookCount, Books.Count);
+            Assert.Null(result);
         }
     }
 }

@@ -34,14 +34,14 @@ namespace BookStore.BL.Services
             return result;
         }
 
-        public async Task Add(Book book)
+        public async Task<Book?> Add(Book book)
         {
             book.Id = Guid.NewGuid();
 
             var author = 
-                _authorService.GetById(book.AuthorId);
+                await _authorService.GetById(book.AuthorId);
 
-            if (author == null) return;
+            if (author == null) return null;
 
             var authorBooks = 
                 await _bookRepository
@@ -50,9 +50,11 @@ namespace BookStore.BL.Services
             var titleForAuthorExist =
                 authorBooks.Any(b => b.Title == book.Title);
 
-            if (titleForAuthorExist) return;
+            if (titleForAuthorExist) return null;
 
             await _bookRepository.Add(book);
+
+            return book;
         }
 
         public async Task Delete(Guid id)
