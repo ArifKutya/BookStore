@@ -1,3 +1,4 @@
+using System.Text;
 using BookStore.BL.Interfaces;
 using BookStore.BL.Services;
 using BookStore.DL.Interfaces;
@@ -6,6 +7,8 @@ using BookStore.DL.Repositories.MongoDb;
 using BookStore.Extensions;
 using BookStore.HealthChecks;
 using BookStore.Models.Configurations;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson;
@@ -34,6 +37,23 @@ builder.Services.AddSingleton<ILibraryService, LibraryService>();
 builder.Services.AddSingleton<IUserInfoRepository, UserInfoRepository>();
 builder.Services.AddSingleton<IUserInfoService, UserInfoService>();
 
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            IssuerSigningKey = 
+                new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes("Jwt:Key"))
+        };
+    });
 
 builder.Services.AddAutoMapper(typeof(Program));
 
@@ -55,6 +75,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseAuthentication();
 
 app.RegisterHealthChecks();
 
