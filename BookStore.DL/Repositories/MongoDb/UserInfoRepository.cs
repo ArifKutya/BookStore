@@ -43,5 +43,10 @@ namespace BookStore.DL.Repositories.MongoDb
                 .Find(filter).FirstOrDefault();
             return Task.FromResult(item);
         }
+
+        public async Task Add(UserInfo user)
+        {
+            await _users.InsertOneAsync(user);
+        }
     }
 }

@@ -31,6 +31,9 @@ builder.Services.AddSingleton<IAuthorRepository, AuthorMongoRepository>();
 builder.Services.AddSingleton<IBookService, BookService>();
 builder.Services.AddSingleton<IBookRepository, BookMongoRepository>();
 builder.Services.AddSingleton<ILibraryService, LibraryService>();
+builder.Services.AddSingleton<IUserInfoRepository, UserInfoRepository>();
+builder.Services.AddSingleton<IUserInfoService, UserInfoService>();
+
 
 builder.Services.AddAutoMapper(typeof(Program));
 
