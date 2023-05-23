@@ -1,5 +1,6 @@
 ﻿using BookStore.BL.Interfaces;
 using BookStore.Models.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.Controllers
@@ -17,6 +18,7 @@ namespace BookStore.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Book>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("GetAllBooks")]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             var result = await _bookService.GetAll();
