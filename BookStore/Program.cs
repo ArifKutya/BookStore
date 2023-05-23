@@ -9,6 +9,7 @@ using BookStore.HealthChecks;
 using BookStore.Models.Configurations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson;
@@ -45,8 +46,8 @@ builder.Services
         options.SaveToken = true;
         options.TokenValidationParameters = new TokenValidationParameters()
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,
+            ValidateIssuer = false,
+            ValidateAudience = false,
             ValidAudience = builder.Configuration["Jwt:Audience"],
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             IssuerSigningKey = 
@@ -60,7 +61,37 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(x =>
+{
+    var jwtSecurityScheme = new OpenApiSecurityScheme()
+    {
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Name = "JWT Authentication",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Description = "Put **_ONLY_** JWT Bearer token in the text box below!",
+        Reference = new OpenApiReference()
+        {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = ReferenceType.SecurityScheme
+        }
+    };
+
+    x.AddSecurityDefinition(
+        jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+    x.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    {
+        { jwtSecurityScheme, Array.Empty<string>() }
+    });
+});
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("View", policy =>
+    {
+        policy.RequireClaim("View", "Employee");
+    });
+});
 
 builder.Services.AddHealthChecks()
     .AddCheck<MongoHealthCheck>("MongoDB");
@@ -77,12 +108,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.RegisterHealthChecks();
 
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
 
 app.MapControllers();
 
