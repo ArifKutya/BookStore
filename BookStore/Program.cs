@@ -46,13 +46,14 @@ builder.Services
         options.SaveToken = true;
         options.TokenValidationParameters = new TokenValidationParameters()
         {
-            ValidateIssuer = false,
-            ValidateAudience = false,
+            ValidateIssuer = true,
+            ValidateAudience = true,
             ValidAudience = builder.Configuration["Jwt:Audience"],
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            
             IssuerSigningKey = 
                 new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes("Jwt:Key"))
+                    Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
 
@@ -75,7 +76,8 @@ builder.Services.AddSwaggerGen(x =>
         {
             Id = JwtBearerDefaults.AuthenticationScheme,
             Type = ReferenceType.SecurityScheme
-        }
+        },
+        
     };
 
     x.AddSecurityDefinition(
