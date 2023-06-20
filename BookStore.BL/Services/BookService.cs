@@ -4,54 +4,62 @@ using BookStore.Models.Models;
 
 namespace BookStore.BL.Services
 {
-    ppublic class BookService : IBookService
+   public interface IUserService
 {
-    private readonly IBookRepository _bookRepository;
-    private readonly IValidator<Book> _bookValidator;
+    Task<UserModel> GetUserByIdAsync(string userId);
+}
 
-    public BookService(IBookRepository bookRepository, IValidator<Book> bookValidator)
+public class UserService : IUserService
+{
+    private readonly IBookService _bookService;
+    private readonly IProductService _productService;
+
+    public UserService(IBookService bookService, IProductService productService)
     {
-        _bookRepository = bookRepository;
-        _bookValidator = bookValidator;
+        _bookService = bookService;
+        _productService = productService;
     }
 
-    public async Task<Book> GetBookByIdAsync(Guid id)
+    public async Task<UserModel> GetUserByIdAsync(string userId)
     {
-        return await _bookRepository.GetByIdAsync(id);
-    }
+        var bookId = Guid.NewGuid(); // Примерен идентификатор на книга
+        var productId = Guid.NewGuid(); // Примерен идентификатор на продукт
 
-    public async Task<List<Book>> GetAllBooksAsync()
-    {
-        return await _bookRepository.GetAllAsync();
-    }
+        var book = await _bookService.GetBookByIdAsync(bookId);
+        var product = await _productService.GetProductByIdAsync(productId);
 
-    public async Task CreateBookAsync(Book book)
-    {
-        var validationResult = await _bookValidator.ValidateAsync(book);
-        if (!validationResult.IsValid)
+        var userModel = new UserModel
         {
-            // Обработка на грешките валидацията
-            throw new Exception("Invalid book data.");
+            UserId = userId,
+            UserName = "John Doe",
+            UserProduct = product
+        };
+
+        return userModel;
+    }
+}
+
+[ApiController]
+[Route("api/users")]
+public class UserController : ControllerBase
+{
+    private readonly IUserService _userService;
+
+    public UserController(IUserService userService)
+    {
+        _userService = userService;
+    }
+
+    [HttpGet("{userId}")]
+    public async Task<ActionResult<UserModel>> GetUserById(string userId)
+    {
+        var user = await _userService.GetUserByIdAsync(userId);
+        if (user == null)
+        {
+            return NotFound();
         }
 
-        await _bookRepository.CreateAsync(book);
-    }
-
-    public async Task UpdateBookAsync(Book book)
-    {
-        var validationResult = await _bookValidator.ValidateAsync(book);
-        if (!validationResult.IsValid)
-        {
-            // Обработка на грешките валидацията
-            throw new Exception("Invalid book data.");
-        }
-
-        await _bookRepository.UpdateAsync(book);
-    }
-
-    public async Task DeleteBookAsync(Guid id)
-    {
-        await _bookRepository.DeleteAsync(id);
+        return Ok(user);
     }
 }
 }
