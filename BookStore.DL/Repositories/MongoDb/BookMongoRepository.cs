@@ -7,64 +7,39 @@ using MongoDB.Driver;
 
 namespace BookStore.DL.Repositories.MongoDb
 {
-    public class BookMongoRepository : IBookRepository
+   public class BookRepository : IBookRepository
+{
+    private readonly IMongoCollection<Book> _bookCollection;
+
+    public BookRepository(IMongoDatabase database)
     {
-        private readonly IMongoCollection<Book> _books;
-
-        public BookMongoRepository(IOptionsMonitor<MongoDbConfiguration> mongoConfig)
-        {
-            var client = new MongoClient(
-                mongoConfig.CurrentValue.ConnectionString);
-            var database =
-                client.GetDatabase(mongoConfig.CurrentValue.DatabaseName);
-            var collectionSettings = new MongoCollectionSettings
-            {
-                GuidRepresentation = GuidRepresentation.Standard
-            };
-            _books = database
-                .GetCollection<Book>(nameof(Book), collectionSettings);
-        }
-
-        public async Task<IEnumerable<Book>> GetAll()
-        {
-            return await
-                _books.Find(author => true).ToListAsync();
-        }
-
-        public async Task<Book?> GetById(Guid id)
-        {
-            var item = await _books
-                .Find(Builders<Book>.Filter.Eq("_id", id))
-                .FirstOrDefaultAsync();
-            return item;
-        }
-
-        public async Task Add(Book author)
-        {
-            await _books.InsertOneAsync(author);
-        }
-
-        public Task Delete(Guid id)
-        {
-            return _books.DeleteOneAsync(x => x.Id == id);
-        }
-
-        public async Task Update(Book book)
-        {
-            var filter =
-                Builders<Book>.Filter.Eq(s => s.Id, book.Id);
-            var update = Builders<Book>
-                .Update.Set(s =>
-                    s.Title, book.Title);
-
-            await _books.UpdateOneAsync(filter, update);
-        }
-
-        public async Task<IEnumerable<Book>> GetAllByAuthorId(Guid authorId)
-        {
-            return await _books
-                .Find(x => x.AuthorId == authorId)
-                .ToListAsync();
-        }
+        _bookCollection = database.GetCollection<Book>("Books");
     }
+
+    public async Task<Book> GetByIdAsync(Guid id)
+    {
+        return await _bookCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+    }
+
+    public async Task<List<Book>> GetAllAsync()
+    {
+        return await _bookCollection.Find(_ => true).ToListAsync();
+    }
+
+    public async Task CreateAsync(Book book)
+    {
+        await _bookCollection.InsertOneAsync(book);
+    }
+
+    public async Task UpdateAsync(Book book)
+    {
+        await _bookCollection.ReplaceOneAsync(x => x.Id == book.Id, book);
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        await _bookCollection.DeleteOneAsync(x => x.Id == id);
+    }
+}
+
 }

@@ -5,64 +5,59 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class BookController : ControllerBase
+   [ApiController]
+[Route("controller")]
+public class BookController : ControllerBase
+{
+    private readonly IBookService _bookService;
+
+    public BookController(IBookService bookService)
     {
-        private readonly IBookService _bookService;
+        _bookService = bookService;
+    }
 
-        public BookController(IBookService bookService)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Book>> Get(Guid id)
+    {
+        var book = await _bookService.GetBookByIdAsync(id);
+        if (book == null)
         {
-           _bookService = bookService;
-        }
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Book>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet("GetAllBooks")]
-        [Authorize]
-        public async Task<IActionResult> GetAll()
-        {
-            var result = await _bookService.GetAll();
-
-            if (result != null && result.Any()) return Ok(result);
-
             return NotFound();
         }
 
-        [ProducesResponseType(StatusCodes.Status200OK,
-            Type = typeof(Book))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        return Ok(book);
+    }
 
-        [HttpGet("GetById")]
-        public async Task<IActionResult> GetById(Guid id)
+    [HttpGet]
+    public async Task<ActionResult<List<Book>>> GetAll()
+    {
+        var books = await _bookService.GetAllBooksAsync();
+        return Ok(books);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(Book book)
+    {
+        await _bookService.CreateBookAsync(book);
+        return CreatedAtAction(nameof(Get), new { id = book.Id }, book);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(Guid id, Book book)
+    {
+        if (id != book.Id)
         {
-            if (id == null) return BadRequest(id);
-
-            var result = await _bookService.GetById(id);
-
-            if (result != null) return Ok(result);
-
-            return NotFound();
+            return BadRequest();
         }
 
-        [HttpPost("Add")]
-        public async Task Add([FromBody] Book book)
-        {
-            await _bookService.Add(book);
-        }
+        await _bookService.UpdateBookAsync(book);
+        return NoContent();
+    }
 
-        [HttpPost("Update")]
-        public async Task Update([FromBody] Book book)
-        {
-            await _bookService.Update(book);
-        }
-
-        [HttpDelete("Delete")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-           await _bookService.Delete(id);
-
-           return Ok();
-        }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        await _bookService.DeleteBookAsync(id);
+        return NoContent();
     }
 }
